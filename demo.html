@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>leaning jquery</title>
+    </head>
+    <body>
+        <h1>this a demo of learning jquery</h1>
+        <script>
+            var document = window.document;
+            function DOMEval(code, doc) {
+                doc = doc || document;
+                var script = doc.createElement("script");
+                script.text = code;
+                doc.head.appendChild(script).parentNode.removeChild(script);
+            }
+            DOMEval("alert('hello, word')");
+        </script>
+    </body>
+</html>
