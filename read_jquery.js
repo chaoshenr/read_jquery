@@ -108,11 +108,13 @@ var
 	// Make sure we trim BOM and NBSP
 	// 用于裁去字符串前后，我们不需要的 BOM字符和 NBSP字符
 	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
-
+    // 匹配-ms-
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
+	// 匹配带横线的首字母，将其转换为驼峰式
 	rdashAlpha = /-([a-z])/g,
 
+	// 作为replace的回调函数使用
 	// Used by jQuery.camelCase as callback to replace()
 	fcamelCase = function( all, letter ) {
 		return letter.toUpperCase();
@@ -132,8 +134,7 @@ jQuery.fn = jQuery.prototype = {
 		return slice.call( this );
 	},
 
-	// Get the Nth element in the matched element set OR
-	// Get the whole matched element set as a clean array
+	// 获取匹配到下标num的元素。如果num为空则，则将jquery对象转换为数组返回
 	get: function( num ) {
 
 		// Return all the elements in a clean array
@@ -145,13 +146,15 @@ jQuery.fn = jQuery.prototype = {
 		return num < 0 ? this[ num + this.length ] : this[ num ];
 	},
 
+	// 将一个数组压入jQuery栈中，返回昕的jQuery对象
 	// Take an array of elements and push it onto the stack
 	// (returning the new matched element set)
 	pushStack: function( elems ) {
-
+		// 创建一个新的合并后的对象
 		// Build a new jQuery matched element set
 		var ret = jQuery.merge( this.constructor(), elems );
 
+		// 为新对象添加一个属性prevObject对象，指向压栈前的对象
 		// Add the old object onto the stack (as a reference)
 		ret.prevObject = this;
 
@@ -160,16 +163,18 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	// Execute a callback for every element in the matched set.
+	// 遍历jQuery对象
 	each: function( callback ) {
+		// 这里注意，函数内的each是构造函数在调用each，外层的each是属于原型对象的方法，只能是实例对象调用，所以没有形成递归调用。
 		return jQuery.each( this, callback );
 	},
-
+	// map遍历，因为map遍历会改变遍历的元素，所以将遍历后的结果压入栈中
 	map: function( callback ) {
 		return this.pushStack( jQuery.map( this, function( elem, i ) {
 			return callback.call( elem, i, elem );
 		} ) );
 	},
-
+	// 切片函数，调用jQuery函数，返回的结果一般为栈
 	slice: function() {
 		return this.pushStack( slice.apply( this, arguments ) );
 	},
@@ -184,6 +189,7 @@ jQuery.fn = jQuery.prototype = {
 
 	eq: function( i ) {
 		var len = this.length,
+		// 这里使用了将字符串转换为数字的特殊用法 +1 
 			j = +i + ( i < 0 ? len : 0 );
 		return this.pushStack( j >= 0 && j < len ? [ this[ j ] ] : [] );
 	},
@@ -198,7 +204,7 @@ jQuery.fn = jQuery.prototype = {
 	sort: arr.sort,
 	splice: arr.splice
 };
-
+// 2017/11/20
 jQuery.extend = jQuery.fn.extend = function() {
 	var options, name, src, copy, copyIsArray, clone,
 		target = arguments[ 0 ] || {},

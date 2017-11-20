@@ -6,6 +6,8 @@
     </head>
     <body>
         <h1>this a demo of learning jquery</h1>
+        <h1>jquery</h1>
+        <script type="text/javascript" src="read_jquery.js"></script>
         <script>
             var document = window.document;
             function DOMEval(code, doc) {
@@ -14,7 +16,11 @@
                 script.text = code;
                 doc.head.appendChild(script).parentNode.removeChild(script);
             }
-            DOMEval("alert('hello, word')");
+            var i = '2';
+            console.log(typeof +i);
+            console.log(typeof i);
+            $("h1").first();
+
         </script>
     </body>
 </html>
