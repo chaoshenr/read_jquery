@@ -178,15 +178,15 @@ jQuery.fn = jQuery.prototype = {
 	slice: function() {
 		return this.pushStack( slice.apply( this, arguments ) );
 	},
-
+	// 第一个元素
 	first: function() {
 		return this.eq( 0 );
 	},
-
+	// 最后一个元素
 	last: function() {
 		return this.eq( -1 );
 	},
-
+	// 匹配出下标对象，并入栈
 	eq: function( i ) {
 		var len = this.length,
 		// 这里使用了将字符串转换为数字的特殊用法 +1 
@@ -212,21 +212,23 @@ jQuery.extend = jQuery.fn.extend = function() {
 		length = arguments.length,
 		deep = false;
 
-	// Handle a deep copy situation
+	// 处理深拷贝的情况
 	if ( typeof target === "boolean" ) {
 		deep = target;
-
+		// 跳过boolean和target
 		// Skip the boolean and the target
 		target = arguments[ i ] || {};
 		i++;
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
+	// 处理非对象的情况，当给的目标不是对象时，将目标对象设置为空对象{}
 	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {
 		target = {};
 	}
 
 	// Extend jQuery itself if only one argument is passed
+	// 如果只提供了一个参数，那么久扩展jQuery自身
 	if ( i === length ) {
 		target = this;
 		i--;

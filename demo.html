@@ -8,19 +8,13 @@
         <h1>this a demo of learning jquery</h1>
         <h1>jquery</h1>
         <script type="text/javascript" src="read_jquery.js"></script>
+        <script src="linkedList.js"></script>
         <script>
-            var document = window.document;
-            function DOMEval(code, doc) {
-                doc = doc || document;
-                var script = doc.createElement("script");
-                script.text = code;
-                doc.head.appendChild(script).parentNode.removeChild(script);
-            }
-            var i = '2';
-            console.log(typeof +i);
-            console.log(typeof i);
-            $("h1").first();
-
+            var linkedList = new LinkedList();
+            linkedList.append("chaoshen");
+            linkedList.append("hello");
+            linkedList.removeAt(1);
+            console.log(linkedList.head());
         </script>
     </body>
 </html>
