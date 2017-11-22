@@ -212,10 +212,10 @@ jQuery.extend = jQuery.fn.extend = function() {
 		length = arguments.length,
 		deep = false;
 
-	// 处理深拷贝的情况
+	// 处理深拷贝的情况,如果第一个参数是bool类型，则将其赋值给deep;
+	// 将第二个参数或者空对象赋值给target
 	if ( typeof target === "boolean" ) {
 		deep = target;
-		// 跳过boolean和target
 		// Skip the boolean and the target
 		target = arguments[ i ] || {};
 		i++;
@@ -228,51 +228,55 @@ jQuery.extend = jQuery.fn.extend = function() {
 	}
 
 	// Extend jQuery itself if only one argument is passed
-	// 如果只提供了一个参数，那么久扩展jQuery自身
+	// 如果只传入了一个对象，那么将该对象作为源扩展到jquery自身
 	if ( i === length ) {
 		target = this;
+		// 将遍历下标 -1 以便从源对象开始遍历
 		i--;
 	}
-
+	// 从源对象的位置开始遍历
 	for ( ; i < length; i++ ) {
 
-		// Only deal with non-null/undefined values
+		// 只处理非空和非undefined的值
 		if ( ( options = arguments[ i ] ) != null ) {
 
-			// Extend the base object
+			// 扩展目标对象 target
 			for ( name in options ) {
-				src = target[ name ];
-				copy = options[ name ];
+				src = target[ name ]; //目标对象属性值
+				copy = options[ name ]; //源对象属性值
 
-				// Prevent never-ending loop
+				// 目标对象等于源对象的一个属性时，跳过拷贝，防止发生死循环
 				if ( target === copy ) {
 					continue;
 				}
 
-				// Recurse if we're merging plain objects or arrays
+				// 递归判断我们合并的是否是对象或者数组，是否是深层拷贝
 				if ( deep && copy && ( jQuery.isPlainObject( copy ) ||
 					( copyIsArray = Array.isArray( copy ) ) ) ) {
 
 					if ( copyIsArray ) {
+						// 数组
 						copyIsArray = false;
 						clone = src && Array.isArray( src ) ? src : [];
 
 					} else {
+						// 对象
 						clone = src && jQuery.isPlainObject( src ) ? src : {};
 					}
 
-					// Never move original objects, clone them
+					// 不动原始对象，通过递归调用，将属于对象的属性，进行深层拷贝
 					target[ name ] = jQuery.extend( deep, clone, copy );
 
-				// Don't bring in undefined values
+				// 不拷贝未定义的属性
 				} else if ( copy !== undefined ) {
+					// 非对象的属性直接拷贝
 					target[ name ] = copy;
 				}
 			}
 		}
 	}
 
-	// Return the modified object
+	// 返回目标对象
 	return target;
 };
 
@@ -311,7 +315,7 @@ jQuery.extend( {
 			// subtraction forces infinities to NaN
 			!isNaN( obj - parseFloat( obj ) );
 	},
-
+	// 是否是标准对象
 	isPlainObject: function( obj ) {
 		var proto, Ctor;
 
@@ -332,7 +336,7 @@ jQuery.extend( {
 		Ctor = hasOwn.call( proto, "constructor" ) && proto.constructor;
 		return typeof Ctor === "function" && fnToString.call( Ctor ) === ObjectFunctionString;
 	},
-
+	// 是否是空对象
 	isEmptyObject: function( obj ) {
 
 		/* eslint-disable no-unused-vars */
@@ -344,7 +348,7 @@ jQuery.extend( {
 		}
 		return true;
 	},
-
+	// 返回变量类型
 	type: function( obj ) {
 		if ( obj == null ) {
 			return obj + "";
@@ -357,6 +361,7 @@ jQuery.extend( {
 	},
 
 	// Evaluates a script in a global context
+	// 全局上下文中执行一段脚本
 	globalEval: function( code ) {
 		DOMEval( code );
 	},
@@ -367,7 +372,7 @@ jQuery.extend( {
 	camelCase: function( string ) {
 		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
-
+	// 遍历，数组，对象
 	each: function( obj, callback ) {
 		var length, i = 0;
 
@@ -395,7 +400,7 @@ jQuery.extend( {
 			"" :
 			( text + "" ).replace( rtrim, "" );
 	},
-
+// 2017/11/22
 	// results is for internal usage only
 	makeArray: function( arr, results ) {
 		var ret = results || [];
