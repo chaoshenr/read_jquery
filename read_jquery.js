@@ -401,11 +401,12 @@ jQuery.extend( {
 			( text + "" ).replace( rtrim, "" );
 	},
 // 2017/11/22
-	// results is for internal usage only
+	// 将类数组对象转换为数组（results一般只作为jquery内部使用）
 	makeArray: function( arr, results ) {
 		var ret = results || [];
 
 		if ( arr != null ) {
+			// 如果是类数组的话直接合并
 			if ( isArrayLike( Object( arr ) ) ) {
 				jQuery.merge( ret,
 					typeof arr === "string" ?
@@ -418,13 +419,17 @@ jQuery.extend( {
 
 		return ret;
 	},
-
+	// 返回数组元素在元素中的位置，如果未提供数组或者未找到元素的话返回 -1
+	// 返回 -1 是一个比较重要的点，因为js 中 0 == false返回的结果是true,
+	// 所以如果这里返回了false，用户判断下标使用 result == 0的话是成立的。。
+	// 因此，判断结果要对 -1 进行判断
 	inArray: function( elem, arr, i ) {
 		return arr == null ? -1 : indexOf.call( arr, elem, i );
 	},
 
 	// Support: Android <=4.0 only, PhantomJS 1 only
 	// push.apply(_, arraylike) throws on ancient WebKit
+	// 合并两个数组
 	merge: function( first, second ) {
 		var len = +second.length,
 			j = 0,
@@ -438,18 +443,22 @@ jQuery.extend( {
 
 		return first;
 	},
-
+	// 查找满足筛选函数的数组的元素。原始数组没有受到影响。
+	// invert 表示是否反转筛选结果，为true的话表示返回的结果与筛选出来的结果为互补的结果
 	grep: function( elems, callback, invert ) {
 		var callbackInverse,
 			matches = [],
 			i = 0,
 			length = elems.length,
-			callbackExpect = !invert;
+			callbackExpect = !invert; // callbackExpect 为false 反转，true 不反转，反转时callback通常会返回false
 
 		// Go through the array, only saving the items
 		// that pass the validator function
+		// 只保留被回调函数过滤出来的数组
 		for ( ; i < length; i++ ) {
+			// !callback( elems[ i ], i )为 true 反转，false 不反转
 			callbackInverse = !callback( elems[ i ], i );
+			// 通过上面的列举可以看出，正常情况下的比较是成立的
 			if ( callbackInverse !== callbackExpect ) {
 				matches.push( elems[ i ] );
 			}
@@ -459,12 +468,14 @@ jQuery.extend( {
 	},
 
 	// arg is for internal usage only
+	// arg参数仅作为jquery内部使用
 	map: function( elems, callback, arg ) {
 		var length, value,
 			i = 0,
 			ret = [];
 
 		// Go through the array, translating each of the items to their new values
+		// 遍历数组或者类数组，并通过callback函数映射返回新的数组
 		if ( isArrayLike( elems ) ) {
 			length = elems.length;
 			for ( ; i < length; i++ ) {
@@ -475,7 +486,7 @@ jQuery.extend( {
 				}
 			}
 
-		// Go through every key on the object,
+		// 遍历对象的每个键，通过callback函数映射处理，返回一个数组
 		} else {
 			for ( i in elems ) {
 				value = callback( elems[ i ], i, arg );
@@ -491,13 +502,16 @@ jQuery.extend( {
 	},
 
 	// A global GUID counter for objects
+	// 全局对象计数器，
 	guid: 1,
 
 	// Bind a function to a context, optionally partially applying any
 	// arguments.
+	// 将一个函数绑定到一个上下文，可以选择部分地应用任何内容
 	proxy: function( fn, context ) {
 		var tmp, args, proxy;
-
+		// 如果context是字符串类型，则按照 fn 是上下文（对象），context 是函数名处理（该函数名是上下文对象的属性）
+		// 并且将通过 fn[context] 得到函数 tmp并赋值给fn，最后将context转换为上下文对象
 		if ( typeof context === "string" ) {
 			tmp = fn[ context ];
 			context = fn;
@@ -506,29 +520,34 @@ jQuery.extend( {
 
 		// Quick check to determine if target is callable, in the spec
 		// this throws a TypeError, but we will just return undefined.
+		// 如果fn不是函数，则返回undefined
 		if ( !jQuery.isFunction( fn ) ) {
 			return undefined;
 		}
 
 		// Simulated bind
+		// 获取第三个以及以后的参数并转为数组
 		args = slice.call( arguments, 2 );
+		// 作为返回的函数
 		proxy = function() {
+			// 最终被执行的是这里：将fn的上下文变为context 后者 this, 并将上下文后面的参数添加到函数中
 			return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
 		};
 
 		// Set the guid of unique handler to the same of original handler, so it can be removed
+		// 给函数设置一个唯一的q全局id, 保证它可以被删除掉
 		proxy.guid = fn.guid = fn.guid || jQuery.guid++;
 
 		return proxy;
 	},
-
+	// 获取当前日期
 	now: Date.now,
 
 	// jQuery.support is not used in Core but other projects attach their
 	// properties to it so it needs to exist.
 	support: support
 } );
-
+// 如果存在符号类型
 if ( typeof Symbol === "function" ) {
 	jQuery.fn[ Symbol.iterator ] = arr[ Symbol.iterator ];
 }
@@ -555,6 +574,7 @@ function isArrayLike( obj ) {
 	return type === "array" || length === 0 ||
 		typeof length === "number" && length > 0 && ( length - 1 ) in obj;
 }
+// 2017/11/23
 var Sizzle =
 /*!
  * Sizzle CSS Selector Engine v2.3.3
