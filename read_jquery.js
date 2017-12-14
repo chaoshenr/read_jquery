@@ -282,7 +282,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 jQuery.extend( {
 
-	// Unique for each copy of jQuery on the page
+	// 保证多个jquery在页面中的唯一性
 	expando: "jQuery" + ( version + Math.random() ).replace( /\D/g, "" ),
 
 	// Assume jQuery is ready without the ready module
@@ -558,6 +558,7 @@ function( i, name ) {
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 } );
 
+// 类数组或者数组
 function isArrayLike( obj ) {
 
 	// Support: real iOS 8.2 only (not reproducible in simulator)
@@ -575,6 +576,7 @@ function isArrayLike( obj ) {
 		typeof length === "number" && length > 0 && ( length - 1 ) in obj;
 }
 // 2017/11/23
+// Sizzle引擎
 var Sizzle =
 /*!
  * Sizzle CSS Selector Engine v2.3.3
@@ -634,6 +636,7 @@ var i,
 	slice = arr.slice,
 	// Use a stripped-down indexOf as it's faster than native
 	// https://jsperf.com/thor-indexof-vs-for/5
+	// 计算给定元素在数组中的位置（下标）
 	indexOf = function( list, elem ) {
 		var i = 0,
 			len = list.length;

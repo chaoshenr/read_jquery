@@ -10,14 +10,34 @@
         <script type="text/javascript" src="read_jquery.js"></script>
         <script src="linkedList.js"></script>
         <script>
-
-            var obj = {
-                name: 'jinchao'
-            }
-            var sayHello = $.proxy(function (age) {
-                console.log("hello: ",this.name)
-            }, obj, 18)
-            sayHello();
+            var lengthOfLongestSubstring = function(s) {
+                var s_arr = s.split('');
+                var length = s_arr.length;
+                var max_length = 0;
+                var flag_length = 1;
+                var flag = false;
+                for(var i = 0; i < length; i++){
+                    var i_num = s_arr[i];
+                    for (var j = i + 1; j < length; j++) {
+                        var j_num = s_arr[j];
+                        if (i_num == j_num) {
+                            continue;
+                        }
+                        flag_length ++;
+                        for (var m = j - 1; m > 0; m--) {
+                            var m_num = s_arr[m];
+                            if (j_num == m_num) {
+                                max_length = max_length > flag_length ? max_length : flag_length;
+                                flag_length = 0;
+                                // flag_length --;
+                            }
+                        }
+                    }
+                    
+                }
+                return max_length;
+            };
+            console.log(lengthOfLongestSubstring("abcedg"));
         </script>
     </body>
 </html>
